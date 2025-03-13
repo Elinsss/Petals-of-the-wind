@@ -1,0 +1,454 @@
+﻿@{
+@inject IHttpContextAccessor HttpContextAccessor
+
+    var email = HttpContextAccessor.HttpContext.Session.GetString("Email");
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Купить букеты с доставкой в Энгельсе | Лепестки ветра</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/FloryMood.styles.css" asp-append-version="true" />
+
+    <style>
+        /* Общие стили для тела страницы */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #FF5555, #FF9C9C);
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between; /* Красиво раскидывает элементы */
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: white;
+            transition: transform 0.3s ease-in-out;
+        }
+
+            .logo:hover {
+                transform: scale(1.1);
+            }
+
+        .contacts {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .user-panel {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Улучшенные кнопки */
+        .user-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 14px;
+            font-size: 15px;
+            color: white;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+        }
+
+            .user-btn:hover {
+                background: rgba(255, 255, 255, 0.3);
+                transform: scale(1.05);
+                box-shadow: 0 3px 8px rgba(255, 255, 255, 0.2);
+            }
+
+            .user-btn:focus, .user-btn:hover {
+                outline: none;
+                color: white; 
+            }
+
+        /* Корзина - отдельный стильный блок */
+        .cart {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 16px;
+            font-size: 16px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #ff4757, #ff6b81);
+            border-radius: 8px;
+            transition: transform 0.2s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+            .cart:hover {
+                transform: scale(1.08);
+                box-shadow: 0 4px 10px rgba(255, 71, 87, 0.7);
+            }
+
+        /* Навигационное меню */
+        .nav {
+            background: #CD5C5C;
+            padding: 12px 0;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+            .nav a {
+                color: white;
+                text-decoration: none;
+                font-size: 17px;
+                padding: 10px 18px;
+                border-radius: 5px;
+                transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+            }
+
+                .nav a:hover {
+                    background: rgba(255, 255, 255, 0.2);
+                    transform: translateY(-4px);
+                    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+                }
+
+        /* Кнопки */
+        .btn-primary {
+            background: linear-gradient(90deg, #b76da5, #7b3f8e);
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            transition: all 0.3s;
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+            .btn-primary:hover {
+                background: linear-gradient(90deg, #e52e71, #ff8a00);
+                transform: scale(1.05);
+                box-shadow: 0 6px 15px rgba(229, 46, 113, 0.6);
+            }
+
+        /* Футер */
+        /* Стили футера */
+        .footer {
+            background-color: transparent; /* Без фона */
+            color: #333; /* Темный текст */
+            padding-top: 20px;
+            padding-bottom: 20px;
+            font-size: 14px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: 50px; /* Для разделения с контентом */
+            text-align: center;
+        }
+
+            .footer h5 {
+                font-size: 18px;
+                font-weight: bold;
+                margin-bottom: 20px;
+                color: #333; /* Заголовки темные */
+            }
+
+            .footer ul {
+                padding: 0;
+                list-style: none;
+            }
+
+                .footer ul li {
+                    margin-bottom: 10px;
+                }
+
+                    .footer ul li a {
+                        color: #333; /* Темные ссылки */
+                        text-decoration: none;
+                    }
+
+                        .footer ul li a:hover {
+                            text-decoration: underline;
+                        }
+
+            .footer .fa {
+                margin-right: 10px;
+                font-size: 18px;
+                color: #333; /* Темные иконки */
+            }
+
+                .footer .fa:hover {
+                    color: #ff416c; /* Красный цвет при наведении */
+                }
+
+        /* Прикрепляем футер к низу */
+        .wrapper {
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content {
+            flex-grow: 1;
+        }
+
+        /* Стиль для выпадающего меню */
+        .dropdown-menu-profile {
+            background-color: #CD5C5C; /* Цвет фона для меню (градиентный розовый) */
+            color: #333; /* Цвет текста элементов */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 8px 0;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        /* Стиль для выпадающего меню */
+        .dropdown-menu {
+            background-color: #CD5C5C; /* Цвет фона для меню (градиентный розовый) */
+            color: #333; /* Цвет текста элементов */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 8px 0;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        /* Заголовок выпадающего меню */
+        .dropdown-header {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #fff; /* Цвет для заголовков */
+            padding: 8px 16px;
+            text-transform: uppercase;
+        }
+
+        /* Разделитель в выпадающем меню */
+        .dropdown-divider {
+            height: 1px;
+            background-color: #fff; /* Цвет для разделителей */
+            margin: 8px 0;
+        }
+
+        /* Элемент выпадающего меню */
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+            padding: 12px 16px;
+            gap: 8px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+            color: #333; /* Цвет текста для элементов */
+        }
+
+            /* Эффект при наведении на элемент */
+            .dropdown-item:hover {
+                color: #fff; /* Цвет текста при наведении */
+                background-color: #ff416c; /* Цвет фона при наведении */
+            }
+
+            /* Иконка внутри элемента */
+            .dropdown-item i {
+                color: #333; /* Цвет иконки */
+            }
+
+            /* Стиль для бейджа */
+            .dropdown-item span.badge {
+                background-color: #e74c3c; /* Цвет фона бейджа */
+                color: white; /* Цвет текста бейджа */
+            }
+
+        /* Стиль для кнопки аккаунта */
+        .user-btn {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Стиль для выпадающего меню */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: linear-gradient(135deg, #ff4b2b, #ff416c); /* Градиентный фон */
+            min-width: 160px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 8px; /* Закругление углов */
+            left: -20px; /* Сдвиг меню влево */
+        }
+
+            .dropdown-content a {
+                color: white;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+            }
+
+                /* Цвет при наведении на пункты меню */
+                .dropdown-content a:hover {
+                    background-color: #ff416c; /* Цвет hover — более тёмный оттенок */
+                }
+
+        /* Показываем меню при наведении */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Стиль иконки */
+        .bi-person-circle, .bi-person, .bi-box-arrow-right {
+            margin-right: 10px;
+        }
+
+    </style>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+
+    <header>
+        <div class="header">
+            <div class="header-content">
+                <a href="/" class="logo animated-logo" style="color: white; font-size: 30px; font-weight: bold; letter-spacing: 1px;">
+                    <span style="color: white;">Лепестки ветра</span>
+                </a>
+                <div class="contacts">
+                    <span><i class="bi bi-phone"></i> +7 (937) 262-24-71 (Энгельс)</span>
+                </div>
+            </div>
+
+            <div class="user-panel">
+                @if (email == null)
+                {
+                    <a asp-controller="account" asp-action="login" class="user-btn" style="color: white"><i class="bi bi-person"></i> Войти</a>
+                }
+                else
+                {
+                    <a href="#" class="user-btn" style="color: white"><i class="bi bi-heart"></i> Избранное</a>
+                    <div class="dropdown">
+                        <a href="#" class="user-btn"><i class="bi bi-person-circle"></i> Аккаунт</a>
+                        <div class="dropdown-content">
+                            <form asp-controller="account" asp-action="profile" method="post">
+                                <button type="submit" class="dropdown-item" style="color: white">
+                                    <i class="bi bi-person" style="color: white"></i> Профиль
+                                </button>
+                            </form>
+                            <form asp-controller="Account" asp-action="Logout" method="post">
+                                <button type="submit" class="dropdown-item" style="color: white">
+                                    <i class="bi bi-box-arrow-right me-2" style="color: white"></i> Выйти
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+                <div class="cart">
+                    <i class="bi bi-cart"></i> <span>Корзина (0 руб.)</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="nav">
+            <a asp-controller="catalog" asp-action="catalog" asp-route-category="Тюльпаны" class="text-decoration-none">ТЮЛЬПАНЫ</a>
+            <a asp-controller="catalog" asp-action="catalog" asp-route-category="Розы" class="text-decoration-none">РОЗЫ</a>
+            <a asp-controller="catalog" asp-action="catalog" asp-route-category="Монобукеты" class="text-decoration-none">МОНОБУКЕТЫ</a>
+            <a asp-controller="catalog" asp-action="catalog" asp-route-category="Букеты" class="text-decoration-none">БУКЕТЫ</a>
+            <a asp-controller="catalog" asp-action="catalog" asp-route-category="Французские" class="text-decoration-none">ФРАНЦУЗСКИЕ</a>
+            <a asp-controller="catalog" asp-action="catalog" asp-route-category="Гортензии" class="text-decoration-none">ГОРТЕНЗИИ</a>
+            <a asp-controller="catalog" asp-action="catalog" asp-route-category="Гипсофилы" class="text-decoration-none">ГИПСОФИЛЫ</a>
+            <div class="dropdown">
+                <a class="d-flex align-items-center" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">ЕЩЁ...</a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li>
+                        <a class="dropdown-item" asp-controller="catalog" asp-action="catalog" asp-route-category="Мягкие игрушки" class="text-decoration-none">
+                            МЯГКИЕ ИГРУШКИ
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-controller="catalog" asp-action="catalog" asp-route-category="Дополнительные товары" class="text-decoration-none">
+                           ДОП. ТОВАРЫ
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <main role="main">
+
+            @RenderBody()
+        </main>
+
+    </div>
+
+    
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container text-center py-5">
+            <div class="row">
+                <!-- Контактная информация -->
+                <div class="col-md-4">
+                    <h5>Контакты</h5>
+                    <p>Телефон: +7 (123) 456-78-90</p>
+                    <p>Email: info@company.com</p>
+                    <p>Адрес: г. Энгельс, ул. Цветочная, 10</p>
+                </div>
+
+                <!-- Ссылки на страницы -->
+                <div class="col-md-4">
+                    <h5>Полезные ссылки</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Главная</a></li>
+                        <li><a href="#">О нас</a></li>
+                        <li><a href="#">Контакты</a></li>
+                    </ul>
+                </div>
+
+                <!-- Социальные сети -->
+                <div class="col-md-4">
+                    <h5>Социальные сети</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="fa-brands fa-facebook"></a> Facebook</li>
+                        <li><a href="#" class="fa-brands fa-instagram"></a> Instagram</li>
+                        <li><a href="#" class="fa-brands fa-twitter"></a> Twitter</li>
+                        <li><a href="#" class="fa-brands fa-youtube"></a> YouTube</li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <p>&copy; 2025 Лепестки ветра. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,410 @@
+﻿@model List<ProductViewModel>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.0/nouislider.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.0/nouislider.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js"></script>
+
+
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Левая колонка с фильтрами -->
+        <aside class="category col-md-3">
+            <h4 style="color: black">Каталог</h4>
+            <ul class="list-group">
+                <li class="list-group-item @(ViewBag.CurrentCategory == "Тюльпаны" ? "active" : "")">
+                    <a asp-controller="catalog" asp-action="catalog" asp-route-category="Тюльпаны" class="text-decoration-none">Тюльпаны</a>
+                </li>
+                <li class="list-group-item @(ViewBag.CurrentCategory == "Розы" ? "active" : "")">
+                    <a asp-controller="catalog" asp-action="catalog" asp-route-category="Розы" class="text-decoration-none">Розы</a>
+                </li>
+                <li class="list-group-item @(ViewBag.CurrentCategory == "Монобукеты" ? "active" : "")">
+                    <a asp-controller="catalog" asp-action="catalog" asp-route-category="Монобукеты" class="text-decoration-none">Монобукеты</a>
+                </li>
+                <li class="list-group-item @(ViewBag.CurrentCategory == "Букеты" ? "active" : "")">
+                    <a asp-controller="catalog" asp-action="catalog" asp-route-category="Букеты" class="text-decoration-none">Букеты</a>
+                </li>
+                <li class="list-group-item @(ViewBag.CurrentCategory == "Французские" ? "active" : "")">
+                    <a asp-controller="catalog" asp-action="catalog" asp-route-category="Французские" class="text-decoration-none">Французские</a>
+                </li>
+                <li class="list-group-item @(ViewBag.CurrentCategory == "Гортензии" ? "active" : "")">
+                    <a asp-controller="catalog" asp-action="catalog" asp-route-category="Гортензии" class="text-decoration-none">Гортензии</a>
+                </li>
+                <li class="list-group-item @(ViewBag.CurrentCategory == "Гипсофилы" ? "active" : "")">
+                    <a asp-controller="catalog" asp-action="catalog" asp-route-category="Гипсофилы" class="text-decoration-none">Гипсофилы</a>
+                </li>
+                <li class="list-group-item @(ViewBag.CurrentCategory == "Мягкие игрушки" ? "active" : "")">
+                    <a asp-controller="catalog" asp-action="catalog" asp-route-category="Мягкие игрушки" class="text-decoration-none">Мягкие игрушки</a>
+                </li>
+                <li class="list-group-item @(ViewBag.CurrentCategory == "Дополнительные товары" ? "active" : "")">
+                    <a asp-controller="catalog" asp-action="catalog" asp-route-category="Дополнительные товары" class="text-decoration-none">Доп. товар</a>
+                </li>
+            </ul>
+
+            <!-- Фильтрация по цене -->
+            <div class="mt-3">
+                <label for="price-filter" class="mb-2 d-block fw-bold">Фильтровать по цене:</label>
+
+                <!-- Контейнер для ввода значений -->
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <input type="number" id="min-price-input" class="form-control text-center" min="0" max="23450" value="0">
+                    <span class="mx-2">—</span>
+                    <input type="number" id="max-price-input" class="form-control text-center" min="0" max="23450" value="23450">
+                </div>
+
+                <!-- Ползунок диапазона -->
+                <div id="price-slider" class="price-slider mb-3"></div>
+
+                <!-- Кнопка применения -->
+                <button id="apply-price-filter" class="btn btn-primary w-100">Применить</button>
+            </div>
+
+
+
+        </aside>
+
+        <!-- Правая колонка с товарами -->
+        <div class="col-md-9">
+            <h2>@ViewBag.CurrentCategory</h2>
+
+            <!-- Сортировка -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <label for="sort" class="me-2">Сортировать по:</label>
+                    <select id="sort" class="form-select d-inline-block w-auto">
+                        <option value="price-asc" selected>цене: по возрастанию</option>
+                        <option value="price-desc">цене: по убыванию</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                @foreach (var product in Model)
+                {
+                    <div class="card-wrapper col-md-4 product-item" data-price="@product.Price">
+                        <div class="card product-card h-100 shadow-lg border-0 rounded-4 overflow-hidden">
+                            <div class="position-relative z-2">
+                                <img src="@product.ImageUrl" class="card-img-top product-image" alt="@product.Name">
+                                @if (product.IsHit)
+                                {
+                                    <span class="badge bg-danger position-absolute top-0 start-0 m-2 px-3 py-2">🔥 Хит</span>
+                                }
+                            </div>
+                            <div class="card-body text-center d-flex flex-column position-relative z-2">
+                                <h5 class="card-title text-dark fw-bold">@product.Name</h5>
+                                <p class="text-primary fs-5 fw-bold">@product.Price руб.</p>
+                                <p class="text-muted mb-3">🚚 Доставка: @product.DeliveryInfo</p>
+                                <button class="btn btn-gradient flex-grow-1">Купить</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    <style>
+        /* Обёртка для анимационной рамки */
+        .card-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 16px;
+        }
+
+            /* Контейнер для равномерного выравнивания */
+        .row .col {
+            display: flex;
+        }
+
+
+        /* Карточка товара */
+        .product-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            max-width: 300px;
+            min-height: 250px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .product-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            }
+
+        /* Картинка */
+        .product-image {
+            width: 300px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 12px 12px 0 0;
+        }
+
+        /* Заголовок */
+        .card-title {
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Выравнивание контента */
+        .card-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Кнопка */
+        .btn-gradient {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            transition: 0.3s ease-in-out;
+            width: 100%;
+            margin-top: auto;
+        }
+
+            .btn-gradient:hover {
+                background: linear-gradient(45deg, #ff4b2b, #ff416c);
+                transform: scale(1.05);
+            }
+
+        /* Выравнивание контента */
+        .category {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            border-radius: 8px; /* Скругленные углы */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Тень для выделения */
+        }
+
+            .category h4 {
+                font-size: 1.25rem;
+                font-weight: 600;
+                margin-bottom: 15px;
+                color: #fff; /* Белый цвет для текста заголовка */
+            }
+
+        .list-group {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .list-group-item {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border: 1px solid #ddd; /* Светлая граница */
+            border-radius: 6px; /* Скругленные углы */
+            background-color: #fff;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+            .list-group-item a {
+                color: #ff416c; /* Цвет ссылок в оттенках розового */
+                text-decoration: none;
+                font-weight: 500;
+            }
+
+            .list-group-item:hover {
+                background-color: #f1f1f1; /* Цвет при наведении */
+            }
+
+            .list-group-item.active {
+                background-color: #ff416c; /* Активный элемент с фоном цвета градиента */
+                color: white;
+            }
+
+                .list-group-item.active a {
+                    color: white; /* Цвет активной ссылки */
+                }
+
+
+            /* Стили для контейнера ползунка */
+            #price-slider {
+                width: 100%;
+                margin-top: 12px;
+            }
+
+            /* Стили для самой линии ползунка */
+            .noUi-base {
+                background-color: #f1f3f5; /* Светлый фон для контраста */
+                border-radius: 12px;
+                height: 8px; /* Чуть тоньше */
+                box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); /* Легкий объем */
+            }
+
+            /* Стили для соединенной области (между ползунками) */
+            .noUi-connect {
+                background: linear-gradient(90deg, #ff416c, #ff4b2b); /* Градиент для эффекта */
+                border-radius: 12px;
+            }
+
+            /* Стили для самих ползунков */
+            .noUi-handle {
+                background: linear-gradient(145deg, #ff416c, #ff4b2b);
+                border: none;
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                cursor: pointer;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+                transition: transform 0.2s, box-shadow 0.2s;
+            }
+
+                .noUi-handle:hover {
+                    transform: scale(1.2); /* Увеличение при наведении */
+                    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+                }
+
+            /* Стили для значений ползунков */
+            .noUi-tooltip {
+                background: #ff416c;
+                color: white;
+                font-weight: bold;
+                border-radius: 5px;
+                padding: 4px 6px;
+                font-size: 11px;
+                top: -30px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+            }
+
+            /* Стили для кнопки применения фильтра */
+            #apply-price-filter {
+                font-weight: bold;
+                background: linear-gradient(90deg, #ff416c, #ff4b2b);
+                border: none;
+                color: white;
+                padding: 8px 16px;
+                font-size: 14px;
+                border-radius: 6px;
+                transition: background 0.3s, transform 0.2s;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+                cursor: pointer;
+            }
+
+                #apply-price-filter:hover {
+                    background: linear-gradient(90deg, #ff4b2b, #ff416c);
+                    transform: scale(1.05);
+                    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+                }
+
+
+
+    </style>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Применяем сортировку по умолчанию (по возрастанию)
+                const sortValue = document.getElementById('sort').value;
+                applySort(sortValue);
+            });
+
+            document.getElementById('sort').addEventListener('change', function() {
+                let sortValue = this.value;
+                applySort(sortValue);
+            });
+
+            function applySort(sortValue) {
+                let products = Array.from(document.querySelectorAll('.product-item'));
+
+                // Сортировка по цене
+                if (sortValue === 'price-asc') {
+                    products.sort((a, b) => parseFloat(a.getAttribute('data-price')) - parseFloat(b.getAttribute('data-price')));
+                } else if (sortValue === 'price-desc') {
+                    products.sort((a, b) => parseFloat(b.getAttribute('data-price')) - parseFloat(a.getAttribute('data-price')));
+                }
+
+                // Перерисовываем список продуктов
+                let productsList = document.querySelector('.row.g-4');
+                productsList.innerHTML = '';
+                products.forEach(product => {
+                    productsList.appendChild(product);
+                });
+            }
+        </script>
+
+        <script>
+                      document.addEventListener("DOMContentLoaded", function () {
+                var priceSlider = document.getElementById("price-slider");
+
+                // Создание ползунка
+                noUiSlider.create(priceSlider, {
+                    start: [0, 23450],
+                    connect: true,
+                    range: {
+                        min: 0,
+                        max: 23450
+                    },
+                    step: 1, // шаг изменения цены
+                    format: {
+                        to: function (value) {
+                            return Math.round(value);
+                        },
+                        from: function (value) {
+                            return value;
+                        }
+                    }
+                });
+
+                // Поля ввода цены
+                var minPriceInput = document.getElementById("min-price-input");
+                var maxPriceInput = document.getElementById("max-price-input");
+
+                // Обновляем поля ввода при движении ползунка
+                priceSlider.noUiSlider.on("update", function (values) {
+                    minPriceInput.value = values[0];
+                    maxPriceInput.value = values[1];
+                });
+
+                // Изменение в поле "мин. цена" => обновление ползунка
+                minPriceInput.addEventListener("change", function () {
+                    var min = parseInt(minPriceInput.value);
+                    var max = parseInt(maxPriceInput.value);
+                    if (min < 0) min = 0;
+                    if (min > max) min = max;
+                    priceSlider.noUiSlider.set([min, max]);
+                });
+
+                // Изменение в поле "макс. цена" => обновление ползунка
+                maxPriceInput.addEventListener("change", function () {
+                    var min = parseInt(minPriceInput.value);
+                    var max = parseInt(maxPriceInput.value);
+                    if (max > 23450) max = 23450;
+                    if (max < min) max = min;
+                    priceSlider.noUiSlider.set([min, max]);
+                });
+
+                // Фильтрация товаров
+                document.getElementById("apply-price-filter").addEventListener("click", function () {
+                    var priceRange = priceSlider.noUiSlider.get();
+                    var minPrice = parseFloat(priceRange[0]);
+                    var maxPrice = parseFloat(priceRange[1]);
+
+                    let products = document.querySelectorAll(".product-item");
+
+                    products.forEach(function (product) {
+                        let price = parseFloat(product.getAttribute("data-price"));
+
+                        if (price >= minPrice && price <= maxPrice) {
+                            product.style.display = "block"; // Показываем товар
+                        } else {
+                            product.style.display = "none"; // Скрываем товар
+                        }
+                    });
+                });
+            });
+        </script>
+    </div>
+</div>

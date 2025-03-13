@@ -1,0 +1,84 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+div[style*="height: 65px;"] {
+    display: none;
+}
+
+div[style*="opacity: 0.9; z-index: 2147483647; position: fixed; left: 0px; bottom: 0px; height: 65px; right: 0px; display: block; width: 100%; background-color: #202020; margin: 0px; padding: 0px;"] {
+    display: none !important;
+}
+
+center {
+    display: none !important;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animated-logo {
+    animation: fadeIn 1s ease-out;
+}
+
+/* Убираем стрелки у input[type=number] */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield; /* Для Firefox */
+}
+
+/* Пульсирующее движение рамки */
+@keyframes pulse-border {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    25% {
+        transform: translate(3px, -3px);
+    }
+
+    50% {
+        transform: translate(-3px, 3px);
+    }
+
+    75% {
+        transform: translate(3px, 3px);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}

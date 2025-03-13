@@ -1,0 +1,257 @@
+﻿@model List<Product>
+
+@{
+    ViewData["Title"] = "Хиты продаж";
+
+    // Фильтруем "Хиты"
+    var hits = Model.Where(p => p.is_hit).ToList();
+
+    var groupedProducts = Model
+        .GroupBy(p => p.type)
+        .ToDictionary(g => g.Key, g => g.ToList());
+
+    string FormatCategoryTitle(string category)
+    {
+        return $"🔹 {category} 🔹";
+    }
+}
+
+<body>
+    <!-- Подключаем Font Awesome (если не подключен) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <div class="advantages-section container text-center mt-5">
+        <div class="row">
+            <div class="col-md-3 col-sm-6 advantage-item">
+                <i class="fa-solid fa-truck advantage-icon"></i>
+                <h4 class="advantage-title">по Энгельсу</h4>
+                <p class="advantage-text">Бесплатно от 5000 р.</p>
+            </div>
+            <div class="col-md-3 col-sm-6 advantage-item">
+                <i class="fa-solid fa-wallet advantage-icon"></i>
+                <h4 class="advantage-title">Низкие цены</h4>
+                <p class="advantage-text">Высокое качество по низкой цене!</p>
+            </div>
+            <div class="col-md-3 col-sm-6 advantage-item">
+                <i class="fa-solid fa-shield-halved advantage-icon"></i>
+                <h4 class="advantage-title">Гарантия и качество</h4>
+                <p class="advantage-text">Цветы наивысшего качества.</p>
+            </div>
+            <div class="col-md-3 col-sm-6 advantage-item">
+                <i class="fa-solid fa-camera advantage-icon"></i>
+                <h4 class="advantage-title">Пришлем фото букета</h4>
+                <p class="advantage-text">Перед отправкой</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container mt-5">
+        <!-- 🔥 Блок "Хиты продаж" -->
+        @if (hits.Any())
+        {
+            <h2 class="section-title">🔥 Хиты продаж 🔥</h2>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                @foreach (var hit in hits)
+                {
+                    <partial name="_ProductCard" model="hit" />
+                }
+            </div>
+        }
+
+        <!-- 🚀 Блок товаров по категориям -->
+        @foreach (var category in groupedProducts)
+        {
+            <h3 class="category-title">@FormatCategoryTitle(category.Key)</h3>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 category-block" data-category="@category.Key">
+                @foreach (var product in category.Value.Select((p, index) => new { Product = p, Index = index }))
+                {
+                    <div class="col product-card-container @(product.Index >= 8 ? "d-none" : "")">
+                        <partial name="_ProductCard" model="product.Product" />
+                    </div>
+                }
+            </div>
+            @if (category.Value.Count > 8)
+            {
+                <div class="text-center mt-3">
+                    <button class="btn btn-primary show-more-btn" data-category="@category.Key">Показать ещё</button>
+                </div>
+            }
+        }
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".show-more-btn").forEach(button => {
+                button.addEventListener("click", function () {
+                    let category = this.getAttribute("data-category");
+                    let hiddenProducts = document.querySelectorAll(`[data-category='${category}'] .product-card-container.d-none`);
+                    hiddenProducts.forEach((product, index) => {
+                        if (index < 8) product.classList.remove("d-none");
+                    });
+
+                    if (document.querySelectorAll(`[data-category='${category}'] .product-card-container.d-none`).length === 0) {
+                        this.style.display = "none";
+                    }
+                });
+            });
+        });
+    </script>
+
+    <style>
+        /* Обёртка для анимационной рамки */
+        .card-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 16px;
+        }
+
+        /* Анимационная рамка */
+        .animated-border {
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            width: calc(100% + 6px);
+            height: calc(100% + 6px);
+            border-radius: 16px;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b, #ff416c);
+            z-index: 0;
+            animation: pulse-border 4s infinite ease-in-out;
+        }
+
+        /* Контейнер для равномерного выравнивания */
+        .row .col {
+            display: flex; 
+        }
+
+
+
+        /* Карточка товара */
+        .product-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; 
+            height: 100%; 
+            max-width: 300px;
+            min-height: 250px; 
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .product-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            }
+
+        /* Картинка */
+        .product-image {
+            width: 300px;
+            height: 250px; 
+            object-fit: cover;
+            border-radius: 12px 12px 0 0;
+        }
+
+        /* Заголовок */
+        .card-title {
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Выравнивание контента */
+        .card-body {
+            flex-grow: 1; 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Кнопка */
+        .btn-gradient {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            transition: 0.3s ease-in-out;
+            width: 100%;
+            margin-top: auto; 
+        }
+
+            .btn-gradient:hover {
+                background: linear-gradient(45deg, #ff4b2b, #ff416c);
+                transform: scale(1.05);
+            }
+
+
+        /* Заголовок секции */
+        .section-title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #ff416c;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        /* Заголовки категорий */
+        .category-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            text-transform: capitalize;
+            position: relative;
+            margin-top: 40px;
+            padding-bottom: 10px;
+        }
+
+            .category-title::after {
+                content: "";
+                display: block;
+                width: 80px;
+                height: 4px;
+                background: linear-gradient(45deg, #ff416c, #ff4b2b);
+                margin: 8px auto 0;
+                border-radius: 4px;
+            }
+
+        .advantages-section {
+            padding: 40px 0;
+        }
+
+        .advantage-item {
+            padding: 20px;
+        }
+
+        .advantage-icon {
+            font-size: 50px;
+            color: #ff4b2b; /* Красивый цвет */
+            margin-bottom: 15px;
+        }
+
+        .advantage-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .advantage-text {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .advantage-item:not(:last-child) {
+            border-right: 1px solid #eee;
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</body>
