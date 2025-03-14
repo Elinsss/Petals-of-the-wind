@@ -14,7 +14,10 @@
             <div class="card-body text-center d-flex flex-column position-relative z-2">
                 <h5 class="card-title text-dark fw-bold">@Model.name</h5>
                 <p class="text-primary fs-5 fw-bold">@Model.price руб.</p>
-                <p class="text-muted mb-3">🚚 Доставка: @Model.delivery</p>
+                @if (@Model.delivery == "Бесплатно")
+                {<p class="text-muted mb-3">🚚 Доставка: @Model.delivery</p>}
+                else
+                {<p class="text-muted mb-3">🚚 Доставка: @Model.delivery руб.</p>}
                 <button class="btn btn-gradient flex-grow-1">Купить</button>
             </div>
         </div>

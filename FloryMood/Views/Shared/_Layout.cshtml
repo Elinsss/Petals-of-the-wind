@@ -336,7 +336,13 @@
                     <span style="color: white;">Лепестки ветра</span>
                 </a>
                 <div class="contacts">
-                    <span><i class="bi bi-phone"></i> +7 (937) 262-24-71 (Энгельс)</span>
+                    <a class="bi bi-phone user-btn" href="#contacts" id="contacts-link" style="color: white;text-decoration:none"> Контакты</a>
+                </div>
+                <div class="contacts">
+                    <a class="bi bi-file-person user-btn" style="color: white;text-decoration:none" asp-controller="home" asp-action="about"> О нас</a>
+                </div>
+                <div class="contacts">
+                    <a class="bi bi-view-list user-btn" style="color: white;text-decoration:none" asp-controller="catalog" asp-action="catalog" asp-route-category="Тюльпаны"> Каталог</a>
                 </div>
             </div>
 
@@ -410,11 +416,12 @@
     <footer class="footer">
         <div class="container text-center py-5">
             <div class="row">
+
                 <!-- Контактная информация -->
-                <div class="col-md-4">
+                <div class="col-md-4" id="contacts">
                     <h5>Контакты</h5>
-                    <p>Телефон: +7 (123) 456-78-90</p>
-                    <p>Email: info@company.com</p>
+                    <p>Телефон: +7 (937) 262-24-71</p>
+                    <p>Email: info@petalswild.ru</p>
                     <p>Адрес: г. Энгельс, ул. Цветочная, 10</p>
                 </div>
 
@@ -422,9 +429,12 @@
                 <div class="col-md-4">
                     <h5>Полезные ссылки</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#">Главная</a></li>
-                        <li><a href="#">О нас</a></li>
-                        <li><a href="#">Контакты</a></li>
+                        <li><a asp-controller="home" asp-action="index">Главная</a></li>
+                        <li><a asp-controller="home" asp-action="about">О нас</a></li>
+                        <li><a asp-controller="catalog" asp-action="catalog" asp-route-category="Тюльпаны">Каталог</a></li>
+                        <li>
+                            <a asp-controller="home" asp-action="privacy">Политика</a>
+                        </li>
                     </ul>
                 </div>
 
@@ -432,10 +442,10 @@
                 <div class="col-md-4">
                     <h5>Социальные сети</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="fa-brands fa-facebook"></a> Facebook</li>
-                        <li><a href="#" class="fa-brands fa-instagram"></a> Instagram</li>
-                        <li><a href="#" class="fa-brands fa-twitter"></a> Twitter</li>
-                        <li><a href="#" class="fa-brands fa-youtube"></a> YouTube</li>
+                        <li><a href="https://www.facebook.com/">Facebook</a></li>
+                        <li><a href="https://www.instagram.com">Instagram</a></li>
+                        <li><a href="https://twitter.com">Twitter</a></li>
+                        <li><a href="https://www.youtube.com">YouTube</a></li>
                     </ul>
                 </div>
             </div>
@@ -445,6 +455,35 @@
             <p>&copy; 2025 Лепестки ветра. Все права защищены.</p>
         </div>
     </footer>
+
+    <style>
+        #contacts.highlight {
+            background-color: rgba(255, 65, 108, 0.15);
+            border: 2px solid rgba(255, 65, 108, 0.5);
+            border-radius: 8px;
+            color: inherit;
+            padding: 10px;
+            transition: all 0.5s ease-out;
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const contactLink = document.getElementById("contacts-link");
+            const contactSection = document.getElementById("contacts");
+
+            contactLink.addEventListener("click", function (event) {
+                event.preventDefault();
+
+                contactSection.scrollIntoView({ behavior: "smooth" });
+
+                contactSection.classList.add("highlight");
+                setTimeout(() => {
+                    contactSection.classList.remove("highlight");
+                }, 1500);
+            });
+        });
+    </script>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

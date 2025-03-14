@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Хиты продаж";
 
-    // Фильтруем "Хиты"
     var hits = Model.Where(p => p.is_hit).ToList();
 
     var groupedProducts = Model
@@ -14,12 +13,12 @@
     {
         return $"🔹 {category} 🔹";
     }
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 }
 
 <body>
-    <!-- Подключаем Font Awesome (если не подключен) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-
     <div class="advantages-section container text-center mt-5">
         <div class="row">
             <div class="col-md-3 col-sm-6 advantage-item">
@@ -71,7 +70,7 @@
                     </div>
                 }
             </div>
-            @if (category.Value.Count > 8)
+            @if (category.Value.Count >= 8)
             {
                 <div class="text-center mt-3">
                     <button class="btn btn-primary show-more-btn" data-category="@category.Key">Показать ещё</button>
@@ -253,5 +252,4 @@
         }
 
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </body>
