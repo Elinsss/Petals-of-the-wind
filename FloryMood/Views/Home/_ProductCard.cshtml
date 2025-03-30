@@ -1,10 +1,13 @@
 ﻿@model Product
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
 <div class="col">
     <div class="card-wrapper">
         <div class="animated-border"></div> <!-- Анимационная рамка -->
         <div class="card product-card h-100 shadow-lg border-0 rounded-4 overflow-hidden">
+            <a asp-controller="catalog" asp-action="item" asp-route-id="@Model.id" style="text-decoration: none">
             <div class="position-relative z-2">
+
                 <img src="@Model.imageurl" class="card-img-top product-image" alt="@Model.name">
                 @if (Model.is_hit)
                 {
@@ -13,13 +16,13 @@
             </div>
             <div class="card-body text-center d-flex flex-column position-relative z-2">
                 <h5 class="card-title text-dark fw-bold">@Model.name</h5>
-                <p class="text-primary fs-5 fw-bold">@Model.price руб.</p>
+                <p class="text-primary fs-5 fw-bold">от @Model.price руб.</p>
                 @if (@Model.delivery == "Бесплатно")
                 {<p class="text-muted mb-3">🚚 Доставка: @Model.delivery</p>}
                 else
                 {<p class="text-muted mb-3">🚚 Доставка: @Model.delivery руб.</p>}
-                <button class="btn btn-gradient flex-grow-1">Купить</button>
             </div>
+            </a>
         </div>
     </div>
 </div>

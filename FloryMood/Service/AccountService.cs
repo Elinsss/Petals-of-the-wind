@@ -77,5 +77,78 @@ namespace Лепестки_ветра.Service
                 return null; 
             }
         }
+
+
+
+
+
+        //Корзина
+        public async Task MergeCartAsync(int userId, List<cart> sessionCart)
+        {
+            foreach (var item in sessionCart)
+                await AddToCartAsync(userId, item.product_id, item.quantity, item.quantity_flowers);
+        }
+
+        public async Task AddToCartAsync(int userId, int productId, int quantity, int quantityFlowers)
+        {
+            var existingItem = await _client.From<cart>()
+                .Filter("user_id", Supabase.Postgrest.Constants.Operator.Equals, userId)
+                .Filter("product_id", Supabase.Postgrest.Constants.Operator.Equals, productId)
+                .Single();
+
+            if (existingItem != null)
+            {
+                existingItem.quantity += quantity; // Увеличиваем количество товара
+                existingItem.quantity_flowers = quantityFlowers; // Обновляем количество цветов
+                await _client.From<cart>().Update(existingItem); // Обновляем корзину в базе
+            }
+            else
+            {
+                await _client.From<cart>().Insert(new cart
+                {
+                    user_id = userId,
+                    product_id = productId,
+                    quantity = quantity,
+                    quantity_flowers = quantityFlowers // Устанавливаем количество цветов
+                });
+            }
+        }
+
+
+        public async Task RemoveFromCartAsync(int userId, int productId)
+        {
+            await _client.From<cart>()
+                .Filter("user_id", Supabase.Postgrest.Constants.Operator.Equals, userId)
+                .Filter("id", Supabase.Postgrest.Constants.Operator.Equals, productId)
+                .Delete();
+        }
+
+
+
+        public async Task<List<cart>> GetCartItemsAsync(int userId)
+        {
+            // Получаем все элементы корзины для пользователя
+            var cartItems = await _client.From<cart>()
+                .Filter("user_id", Supabase.Postgrest.Constants.Operator.Equals, userId)
+                .Get();
+
+            // Для каждого элемента корзины загружаем соответствующий продукт
+            foreach (var cartItem in cartItems.Models)
+            {
+                var product = await _client.From<Product>()
+                    .Filter("id", Supabase.Postgrest.Constants.Operator.Equals, cartItem.product_id)
+                    .Single();
+
+                // Создаем новый объект, который будет содержать как данные корзины, так и продукт
+                cartItem.Product = product;
+            }
+
+            return cartItems.Models;
+        }
+
+
+
+
+
     }
 }

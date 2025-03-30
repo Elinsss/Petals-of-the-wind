@@ -24,6 +24,7 @@ internal class Program
 
 
 
+
         // Подключение сессий
         builder.Services.AddSession(options =>
         {

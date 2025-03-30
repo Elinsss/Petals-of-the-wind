@@ -227,6 +227,7 @@
             border-radius: 8px;
             padding: 8px 0;
             transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+            cursor: pointer;
         }
 
         /* Заголовок выпадающего меню */
@@ -254,6 +255,7 @@
             gap: 8px;
             border-radius: 8px;
             transition: background-color 0.3s ease;
+            cursor: pointer;
             color: #333; /* Цвет текста для элементов */
         }
 
@@ -261,6 +263,7 @@
             .dropdown-item:hover {
                 color: #fff; /* Цвет текста при наведении */
                 background-color: #ff416c; /* Цвет фона при наведении */
+                cursor: pointer;
             }
 
             /* Иконка внутри элемента */
@@ -371,7 +374,9 @@
                     </div>
                 }
                 <div class="cart">
-                    <i class="bi bi-cart"></i> <span>Корзина (0 руб.)</span>
+                    <a asp-controller="account" asp-action="cart" style="text-decoration: none; color: white">
+                        <i class="bi bi-cart"></i> Корзина
+                    </a>
                 </div>
             </div>
 
@@ -386,7 +391,7 @@
             <a asp-controller="catalog" asp-action="catalog" asp-route-category="Гортензии" class="text-decoration-none">ГОРТЕНЗИИ</a>
             <a asp-controller="catalog" asp-action="catalog" asp-route-category="Гипсофилы" class="text-decoration-none">ГИПСОФИЛЫ</a>
             <div class="dropdown">
-                <a class="d-flex align-items-center" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">ЕЩЁ...</a>
+                <a style="cursor: pointer;" class="d-flex align-items-center" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">ЕЩЁ...</a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                     <li>
                         <a class="dropdown-item" asp-controller="catalog" asp-action="catalog" asp-route-category="Мягкие игрушки" class="text-decoration-none">

@@ -12,6 +12,7 @@ namespace Лепестки_ветра.Models
         public decimal price { get; set; }
         public string delivery { get; set; }
         public bool is_hit { get; set; }
+        public string description { get; set; }
         public string type { get; set; }
     }
 

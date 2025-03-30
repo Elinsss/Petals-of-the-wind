@@ -19,11 +19,18 @@ public class CatalogController : Controller
             Price = p.price,
             ImageUrl = p.imageurl,
             IsHit = p.is_hit,
-            DeliveryInfo = p.delivery
+            DeliveryInfo = p.delivery,
         }).ToList();
 
-        ViewBag.CurrentCategory = category; // Передаем текущую категорию в представление
+        ViewBag.CurrentCategory = category;
 
         return View(viewModel);
+    }
+
+    public async Task<IActionResult> Item(int id)
+    {
+        var product = await _productService.GetProductsById(id);
+        if (product == null) return NotFound();
+        return View(product);
     }
 }

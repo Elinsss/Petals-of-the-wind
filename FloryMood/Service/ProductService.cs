@@ -28,4 +28,13 @@ public class ProductService
 
         return response.Models;
     }
+
+    public async Task<Product?> GetProductsById(int id)
+    {
+        var response = await _client.From<Product>()
+            .Where(p => p.id == id)
+            .Get();
+
+        return response.Models.FirstOrDefault();
+    }
 }

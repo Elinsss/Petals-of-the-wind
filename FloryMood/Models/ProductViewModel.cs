@@ -10,4 +10,5 @@ public class ProductViewModel : BaseModel
     public string ImageUrl { get; set; }
     public bool IsHit { get; set; }
     public string DeliveryInfo { get; set; }
+
 }

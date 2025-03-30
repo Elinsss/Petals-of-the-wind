@@ -1,0 +1,726 @@
+﻿<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+
+<style>
+    .product-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    transition: all 0.3s ease;
+    }
+
+    .product-image-container {
+    flex: 1;
+    max-width: 50%;
+    text-align: center;
+    overflow: hidden;
+    border-radius: 10px;
+    }
+
+    .product-image-carousel img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 10px;
+    transition: transform 0.3s, opacity 0.3s ease;
+    }
+
+    .product-image-carousel img:hover {
+    transform: scale(1.1);
+    opacity: 0.9;
+    }
+
+    .product-info {
+    flex: 1;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    }
+
+    .details-list {
+    list-style: none;
+    padding: 0;
+    font-size: 1rem;
+    color: #444;
+    }
+
+    .details-list li {
+    margin-bottom: 8px;
+    font-weight: 500;
+    }
+
+    .product-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+    }
+
+    .btn-custom {
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-align: center;
+    font-size: 1.1rem;
+    }
+
+    .btn-primary {
+    background: linear-gradient(90deg, #ff4757, #ff6b81);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+    }
+
+    .btn-outline-danger {
+    border: 2px solid #dc3545;
+    color: #dc3545;
+    background: transparent;
+    font-weight: 600;
+    }
+
+    .btn-outline-danger:hover {
+    background: #dc3545;
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(220, 53, 69, 0.2);
+    }
+
+    .product-description-container {
+    margin-top: 30px;
+    padding: 30px;
+    background: #f9f9fb;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: all 0.3s ease-in-out;
+    }
+
+    .product-description-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .product-description-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b, #ff416c);
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    h3 {
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    }
+
+    .product-description {
+    font-size: 1.2rem;
+    color: #444;
+    line-height: 1.8;
+    text-align: justify;
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0.5px;
+    padding-top: 10px;
+    }
+
+    .product-description::first-letter {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ff416c;
+    padding-right: 5px;
+    }
+
+
+
+    .details-list li strong {
+    color: #333;
+    font-weight: bold;
+    }
+
+    /* Дополнительные стили для чекабоксов */
+    .details-list input[type="checkbox"] {
+    margin-right: 8px;
+    }
+
+    .product-price, .product-title {
+    font-family: 'Arial', sans-serif;
+    }
+
+    /* Общие стили для контейнеров списков */
+    .details-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    }
+
+    .details-list li {
+    margin-bottom: 12px;
+    font-size: 16px;
+    }
+
+    hr {
+    border: 1px solid #ddd;
+    margin: 10px 0;
+    }
+
+    /* Стили для чекбоксов */
+    .details-list input[type="checkbox"] {
+    display: none; /* Скрываем стандартные чекбоксы */
+    }
+
+    .details-list label {
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    font-size: 16px;
+    display: inline-block;
+    }
+
+    .details-list label:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    }
+
+    .details-list input[type="checkbox"]:checked + label:before {
+    background: linear-gradient(45deg, #ff416c, #ff4b2b, #ff416c);
+    border-color: #ff4b2b;
+    }
+
+    .details-list input[type="checkbox"]:checked + label:after {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    font-size: 14px;
+    color: white;
+    }
+
+    .details-list input[type="checkbox"]:hover + label:before {
+    border-color: #ff4b2b;
+    }
+
+    /* Стили для текста цены */
+    .product-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #d9534f;
+    }
+
+    /* Стили для заголовков */
+    strong {
+    font-weight: bold;
+    }
+
+    /* Стили для информации о доставке */
+    .details-list li strong {
+    color: #555;
+    }
+
+    .advantages-section {
+    margin-top: 20px;
+    }
+
+    .advantage-item {
+    text-align: center;
+    flex: 1;
+    padding: 10px;
+    }
+
+    .advantage-icon {
+    font-size: 30px;
+    color: #ff4b2b;
+    margin-bottom: 10px;
+    }
+
+    .advantage-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    }
+
+    .advantage-text {
+    font-size: 12px;
+    color: #666;
+    }
+
+    .advantage-item:not(:last-child) {
+    border-right: 1px solid #eee;
+    }
+
+    /* Стилизация контейнера вкладок */
+    .tabs-container {
+    margin-bottom: 15px;
+    }
+
+    .tabs {
+    display: flex;
+    border-bottom: 2px solid #ff4b2b;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    }
+
+    .tab-link {
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #333;
+    transition: 0.3s;
+    border-bottom: 3px solid transparent;
+    }
+
+    .tab-link.active {
+    color: #ff4b2b;
+    border-bottom: 3px solid #ff4b2b;
+    }
+
+    /* Скрываем неактивные вкладки */
+    .tab-content {
+    display: none;
+    }
+
+    .tab-content.active {
+    display: block;
+    }
+
+    .quantity-container {
+    max-width: 160px;
+    display: flex;
+    align-items: center;
+    }
+
+    .quantity-container input {
+    width: 60px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-left: none;
+    border-right: none;
+    }
+
+    .quantity-container button {
+    width: 40px;
+    }
+
+    .highlight-input {
+    border: 2px solid #ff4b2b !important;
+    box-shadow: 0 0 5px #ff4b2b;
+    }
+</style>
+
+
+@if (Model.type == "Букеты" || Model.type == "Монобукеты" || Model.type == "Мягкие игрушки" || Model.type == "Дополнительные товары")
+{
+    <div class="container">
+        <div class="product-container card shadow-lg p-4 rounded-4 border-0 d-flex flex-column flex-md-row gap-4 align-items-start">
+            <div class="product-image-container position-relative flex-shrink-0 text-center" style="max-width: 300px;">
+                <div class="product-image-carousel overflow-hidden rounded-4">
+                    <img src="@Model.imageurl" alt="@Model.name" class="img-fluid w-100 object-fit-cover">
+                </div>
+                @if (Model.is_hit)
+                {
+                    <span class="badge bg-danger position-absolute top-0 start-0 m-2 px-3 py-2 shadow-sm">🔥 Хит</span>
+                }
+                <div class="advantages-section container text-center mt-4">
+                    <div class="row d-flex justify-content-center">
+                        <div class="advantage-item d-flex flex-column align-items-center">
+                            <i class="fa-solid fa-truck-ramp-box advantage-icon"></i>
+                            <h4 class="advantage-title">Быстрая доставка</h4>
+                            <p class="advantage-text">От 1 часа, по Энгельсу</p>
+                        </div>
+                        <div class="advantage-item d-flex flex-column align-items-center">
+                            <i class="fa-solid fa-camera advantage-icon"></i>
+                            <h4 class="advantage-title">Пришлем фото букета</h4>
+                            <p class="advantage-text">Перед отправкой</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-info flex-grow-1 d-flex flex-column justify-content-between">
+                <div>
+                    <h2 class="product-title fw-bold text-dark">@Model.name</h2>
+                    <ul class="details-list list-unstyled">
+                        <li><hr class="my-2" /></li>
+                    </ul>
+
+                    <div class="input-group quantity-container">
+                        <span class="input-group-text">Кол-во товара:</span>
+                        <button class="btn btn-outline-secondary" type="button" onclick="changeQuantitys(-1)">−</button>
+                        <input type="number" id="quantityInput" name="quantityForm" class="form-control text-center" value="1" min="1" onchange="updateQuantitys()" />
+                        <button class="btn btn-outline-secondary" type="button" onclick="changeQuantitys(1)">+</button>
+                    </div>
+
+                    <ul class="details-list list-unstyled">
+                        <li><p class="product-price fs-5 fw-semibold text-primary">Цена: от @Model.price руб.</p></li>
+                        <li><strong>Доставка:</strong> <span class="text-secondary">@Model.delivery</span></li>
+                    </ul>
+                </div>
+
+                <div class="product-buttons d-flex gap-3 mt-3">
+                    <form asp-controller="Account" asp-action="AddToCart" method="post">
+                        <input type="hidden" name="productId" value="@Model.id" />
+
+
+                        <input type="number" id="quantityFlowers" name="quantityFlowers" value="1" hidden>
+
+                        <input type="number" id="quantity" name="quantity" value="1" hidden />
+
+
+                        <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center gap-2">
+                            <span>🛒</span> Добавить в корзину
+                        </button>
+                    </form>
+                    <a asp-controller="Wishlist" asp-action="AddToWishlist" asp-route-id="@Model.id" class="btn btn-outline-danger flex-grow-1 shadow-sm d-flex align-items-center justify-content-center gap-2">
+                        <span>❤️</span> В избранное
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs-container">
+            <ul class="tabs">
+                <li class="tab-link active" data-tab="description">
+                    <h3>Описание</h3>
+                </li>
+                <li class="tab-link" data-tab="warranty">
+                    <h3>Гарантия</h3>
+                </li>
+                <li class="tab-link" data-tab="delivery">
+                    <h3>Доставка</h3>
+                </li>
+            </ul>
+        </div>
+
+        <div class="tab-content-container">
+            <div id="description" class="tab-content active">
+                <p class="product-description">@Model.description</p>
+            </div>
+
+            <div id="warranty" class="tab-content">
+                <p>
+                    Мы дорожим нашей репутацией и гарантируем <strong>свежесть и качество</strong> каждого букета.
+                    Все цветы проходят тщательный отбор, а сборка осуществляется профессиональными флористами.
+                </p>
+
+                <h4>⚔️ Что входит в нашу гарантию?</h4>
+                <ul>
+                    <li><strong>Свежесть цветов</strong> – мы используем только свежесрезанные цветы, доставленные от проверенных поставщиков.</li>
+                    <li><strong>Качественная сборка</strong> – каждый букет собирается вручную с любовью и вниманием к деталям.</li>
+                    <li><strong>Соответствие фото</strong> – если букет отличается от представленного на сайте, мы заменим его или вернём деньги.</li>
+                    <li><strong>Долговечность</strong> – даём рекомендации по уходу, чтобы букет радовал вас дольше.</li>
+                </ul>
+            </div>
+
+            <div id="delivery" class="tab-content">
+                <strong>Доставка:</strong>
+                <p>📅 <strong>Доставка осуществляется</strong> — ежедневно с 9:00 до 21:00.</p>
+                <p>✅ <strong>Бесплатная доставка по Энгельсу</strong> при заказе от <strong>5000 р.</strong></p>
+                <p>✅ <strong>Доставка в другие регионы</strong> — по договорённости.</p>
+
+                <strong>Самовывоз:</strong>
+                <p>🏠 <strong>Вы можете забрать заказ самостоятельно</strong> в удобное для вас время.</p>
+                <p>📍 <strong>Адрес пункта самовывоза:</strong> г. Энгельс, ул. Цветочная, 10</p>
+                <p>⏰ <strong>График работы:</strong> ежедневно с 9:00 до 21:00</p>
+                <p>✅ Самовывоз <strong>бесплатный</strong>, без минимальной суммы заказа.</p>
+                <p>✅ Вы получите <strong>фото букета</strong> перед выдачей.</p>
+                <p>✅ Можно оплатить на месте <strong>наличными или картой</strong>.</p>
+
+                <p>📞 <strong>Как оформить самовывоз?</strong></p>
+                <p>
+                    При оформлении заказа выберите "Самовывоз" и укажите удобное время.
+                    Или позвоните нам: <strong>+7 (937) 262-24-71</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="product-container card shadow-lg p-4 rounded-4 border-0 d-flex flex-column flex-md-row gap-4 align-items-start">
+            <div class="product-image-container position-relative flex-shrink-0 text-center" style="max-width: 300px;">
+                <div class="product-image-carousel overflow-hidden rounded-4">
+                    <img src="@Model.imageurl" alt="@Model.name" class="img-fluid w-100 object-fit-cover">
+                </div>
+                @if (Model.is_hit)
+                {
+                    <span class="badge bg-danger position-absolute top-0 start-0 m-2 px-3 py-2 shadow-sm">🔥 Хит</span>
+                }
+                <div class="advantages-section container text-center mt-4">
+                    <div class="row d-flex justify-content-center">
+                        <div class="advantage-item d-flex flex-column align-items-center">
+                            <i class="fa-solid fa-truck-ramp-box advantage-icon"></i>
+                            <h4 class="advantage-title">Быстрая доставка</h4>
+                            <p class="advantage-text">От 1 часа, по Энгельсу</p>
+                        </div>
+                        <div class="advantage-item d-flex flex-column align-items-center">
+                            <i class="fa-solid fa-camera advantage-icon"></i>
+                            <h4 class="advantage-title">Пришлем фото букета</h4>
+                            <p class="advantage-text">Перед отправкой</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-info flex-grow-1 d-flex flex-column justify-content-between">
+                <div>
+                    <h2 class="product-title fw-bold text-dark">@Model.name</h2>
+                    <ul class="details-list list-unstyled">
+                        <li><hr class="my-2" /></li>
+                        <li><strong>Количество цветов в букете:</strong></li>
+                        <li class="d-flex gap-3 flex-wrap">
+                            <div class="form-check">
+                                <input id="Checkbox1" type="checkbox" class="form-check-input" checked onclick="toggleCheckbox(this, 3)">
+                                <label for="Checkbox1" class="form-check-label">3 шт.</label>
+                            </div>
+                            <div class="form-check">
+                                <input id="Checkbox2" type="checkbox" class="form-check-input" onclick="toggleCheckbox(this, 5)">
+                                <label for="Checkbox2" class="form-check-label">5 шт.</label>
+                            </div>
+                            <div class="form-check">
+                                <input id="Checkbox3" type="checkbox" class="form-check-input" onclick="toggleCheckbox(this, 11)">
+                                <label for="Checkbox3" class="form-check-label">11 шт.</label>
+                            </div>
+                            <div class="form-check">
+                                <input id="Checkbox4" type="checkbox" class="form-check-input" onclick="toggleCheckbox(this, 15)">
+                                <label for="Checkbox4" class="form-check-label">15 шт.</label>
+                            </div>
+                            <div class="form-check">
+                                <input id="Checkbox5" type="checkbox" class="form-check-input" onclick="toggleCheckbox(this, 21)">
+                                <label for="Checkbox5" class="form-check-label">21 шт.</label>
+                            </div>
+                        </li>
+                        <li><hr class="my-2" /></li>
+                        <li><strong>Ваше количество цветов в букете:</strong></li>
+                        <!-- Поле для ввода количества с кнопками -->
+                        <li class="mt-2">
+                            <div class="input-group quantity-container">
+                                <button class="btn btn-outline-secondary" type="button" onclick="changeQuantity(-1)">−</button>
+                                <input type="number" id="customQuantity" name="customQuantity" class="form-control text-center"
+                                       placeholder="Введите количество" min="3" max="100" value="3" oninput="selectCustomQuantity()">
+                                <button class="btn btn-outline-secondary" type="button" onclick="changeQuantity(1)">+</button>
+                            </div>
+                        </li>
+
+                        <li><hr class="my-2" /></li>
+                    </ul>
+
+                    <div class="input-group quantity-container">
+                        <span class="input-group-text">Кол-во товара:</span>
+                        <button class="btn btn-outline-secondary" type="button" onclick="changeQuantitys(-1)">−</button>
+                        <input type="number" id="quantityInput" name="quantityForm" class="form-control text-center" value="1" min="1" onchange="updateQuantitys()" />
+                        <button class="btn btn-outline-secondary" type="button" onclick="changeQuantitys(1)">+</button>
+                    </div>
+
+                    <ul class="details-list list-unstyled">
+                        <li><p class="product-price fs-5 fw-semibold text-primary">Цена: от @Model.price руб.</p></li>
+                        <li><strong>Доставка:</strong> <span class="text-secondary">@Model.delivery</span></li>
+                    </ul>
+                </div>
+
+                <div class="product-buttons d-flex gap-3 mt-3">
+                    <form asp-controller="Account" asp-action="AddToCart" method="post">
+                        <input type="hidden" name="productId" value="@Model.id" />
+
+
+                        <input type="number" id="quantityFlowers" name="quantityFlowers" value="3" hidden>
+
+                        <input type="number" id="quantity" name="quantity" value="1" hidden />
+
+
+                        <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center gap-2">
+                            <span>🛒</span> Добавить в корзину
+                        </button>
+                    </form>
+                    <a asp-controller="Wishlist" asp-action="AddToWishlist" asp-route-id="@Model.id" class="btn btn-outline-danger flex-grow-1 shadow-sm d-flex align-items-center justify-content-center gap-2">
+                        <span>❤️</span> В избранное
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs-container">
+            <ul class="tabs">
+                <li class="tab-link active" data-tab="description">
+                    <h3>Описание</h3>
+                </li>
+                <li class="tab-link" data-tab="warranty">
+                    <h3>Гарантия</h3>
+                </li>
+                <li class="tab-link" data-tab="delivery">
+                    <h3>Доставка</h3>
+                </li>
+            </ul>
+        </div>
+
+        <div class="tab-content-container">
+            <div id="description" class="tab-content active">
+                <p class="product-description">@Model.description</p>
+            </div>
+
+            <div id="warranty" class="tab-content">
+                <p>
+                    Мы дорожим нашей репутацией и гарантируем <strong>свежесть и качество</strong> каждого букета.
+                    Все цветы проходят тщательный отбор, а сборка осуществляется профессиональными флористами.
+                </p>
+
+                <h4>⚔️ Что входит в нашу гарантию?</h4>
+                <ul>
+                    <li><strong>Свежесть цветов</strong> – мы используем только свежесрезанные цветы, доставленные от проверенных поставщиков.</li>
+                    <li><strong>Качественная сборка</strong> – каждый букет собирается вручную с любовью и вниманием к деталям.</li>
+                    <li><strong>Соответствие фото</strong> – если букет отличается от представленного на сайте, мы заменим его или вернём деньги.</li>
+                    <li><strong>Долговечность</strong> – даём рекомендации по уходу, чтобы букет радовал вас дольше.</li>
+                </ul>
+            </div>
+
+            <div id="delivery" class="tab-content">
+                <strong>Доставка:</strong>
+                <p>📅 <strong>Доставка осуществляется</strong> — ежедневно с 9:00 до 21:00.</p>
+                <p>✅ <strong>Бесплатная доставка по Энгельсу</strong> при заказе от <strong>5000 р.</strong></p>
+                <p>✅ <strong>Доставка в другие регионы</strong> — по договорённости.</p>
+
+                <strong>Самовывоз:</strong>
+                <p>🏠 <strong>Вы можете забрать заказ самостоятельно</strong> в удобное для вас время.</p>
+                <p>📍 <strong>Адрес пункта самовывоза:</strong> г. Энгельс, ул. Цветочная, 10</p>
+                <p>⏰ <strong>График работы:</strong> ежедневно с 9:00 до 21:00</p>
+                <p>✅ Самовывоз <strong>бесплатный</strong>, без минимальной суммы заказа.</p>
+                <p>✅ Вы получите <strong>фото букета</strong> перед выдачей.</p>
+                <p>✅ Можно оплатить на месте <strong>наличными или картой</strong>.</p>
+
+                <p>📞 <strong>Как оформить самовывоз?</strong></p>
+                <p>
+                    При оформлении заказа выберите "Самовывоз" и укажите удобное время.
+                    Или позвоните нам: <strong>+7 (937) 262-24-71</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<script>
+    function toggleCheckbox(selected, quantity) {
+        document.querySelectorAll('.form-check-input').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        selected.checked = true;
+        document.getElementById('quantityFlowers').value = quantity;
+    }
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tabs = document.querySelectorAll(".tab-link");
+        const contents = document.querySelectorAll(".tab-content");
+
+        tabs.forEach(tab => {
+            tab.addEventListener("click", function () {
+                let tabId = this.getAttribute("data-tab");
+
+                tabs.forEach(t => t.classList.remove("active"));
+                contents.forEach(c => c.classList.remove("active"));
+
+                this.classList.add("active");
+                document.getElementById(tabId).classList.add("active");
+            });
+        });
+    });
+</script>
+
+<script>
+    function changeQuantity(amount) {
+        let input = document.getElementById("customQuantity");
+        let currentValue = parseInt(input.value) || 3;
+
+        // Меняем значение
+        let newValue = currentValue + amount;
+        if (newValue < 3) newValue = 3; // Минимум 3
+
+        input.value = newValue;
+        selectCustomQuantity();
+    }
+
+    function selectCustomQuantity() {
+        let customInput = document.getElementById("customQuantity");
+        let customValue = customInput.value;
+
+        // Если вводим своё количество, сбрасываем чекбоксы
+        if (customValue > 0) {
+            document.querySelectorAll('.form-check-input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+
+            // Добавляем выделение
+            customInput.classList.add("highlight-input");
+            document.getElementById('quantityFlowers').value = customValue;
+        }
+    }
+
+    // Если выбираем чекбокс, убираем подсветку у поля ввода
+    document.querySelectorAll('.form-check-input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener("change", function () {
+            document.getElementById("customQuantity").classList.remove("highlight-input");
+        });
+    });
+</script>
+
+<script>
+    function changeQuantitys(amount) {
+        var quantity = document.getElementById("quantity");
+        var quantityInput = document.getElementById("quantityInput");
+        var currentQuantity = parseInt(quantityInput.value) || 1;
+        var newQuantity = currentQuantity + amount;
+        if (newQuantity < 1) newQuantity = 1;
+        quantityInput.value = newQuantity;
+        quantity.value = newQuantity;
+    }
+
+    function updateQuantitys() {
+        var quantity = document.getElementById("quantity");
+        var quantityInput = document.getElementById("quantityInput");
+        if (parseInt(quantityInput.value) < 1) {
+            quantityInput.value = 1;
+        }
+        quantity.value = quantityInput.value;
+    }
+
+</script>

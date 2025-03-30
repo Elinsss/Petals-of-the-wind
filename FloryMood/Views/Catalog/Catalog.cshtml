@@ -87,6 +87,8 @@
                     {
                         <div class="card-wrapper col-md-4 product-item" data-price="@product.Price">
                             <div class="card product-card h-100 shadow-lg border-0 rounded-4 overflow-hidden">
+                            <a asp-controller="catalog" asp-action="item" asp-route-id="@product.Id" style="text-decoration: none">
+
                                 <div class="position-relative z-2">
                                     <img src="@product.ImageUrl" class="card-img-top product-image" alt="@product.Name">
                                     @if (product.IsHit)
@@ -96,7 +98,7 @@
                                 </div>
                                 <div class="card-body text-center d-flex flex-column position-relative z-2">
                                     <h5 class="card-title text-dark fw-bold">@product.Name</h5>
-                                    <p class="text-primary fs-5 fw-bold">@product.Price руб.</p>
+                                    <p class="text-primary fs-5 fw-bold">от @product.Price руб.</p>
                                     @if (@product.DeliveryInfo == "Бесплатно")
                                     {
                                         <p class="text-muted mb-3">🚚 Доставка: @product.DeliveryInfo</p>
@@ -105,8 +107,8 @@
                                     {
                                         <p class="text-muted mb-3">🚚 Доставка: @product.DeliveryInfo руб.</p>
                                     }
-                                    <button class="btn btn-gradient flex-grow-1">Купить</button>
                                 </div>
+                                </a>
                             </div>
                         </div>
                     }
