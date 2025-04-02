@@ -7,10 +7,9 @@
             (item.quantity_flowers - 3) * (item.Product?.price / (item.quantity_flowers > 0 ? item.quantity_flowers : 1)) : 0)))
         * item.quantity);
 
-    var roundedTotalSum = totalSum.HasValue ? Math.Round(totalSum.Value, 0) : 0; // Округляем, если значение есть, иначе 0
+    var roundedTotalSum = totalSum.HasValue ? Math.Round(totalSum.Value, 0) : 0;
 }
 
-<!-- Заголовок с градиентным фоном -->
 <h2 class="text-center mb-4" style="margin:20px; font-family: 'Arial', sans-serif; font-weight: 700; color: #fff; background: linear-gradient(135deg, #ff4b2b, #ff416c); -webkit-background-clip: text; color: transparent;">
     Ваша корзина
 </h2>
@@ -18,44 +17,64 @@
 @if (Model == null || !Model.Any())
 {
     <div class="text-center" style="font-size: 1.5rem; color: #888; font-weight: bold;">
-        <!-- Изменен цвет на белый -->
         <p>Корзина пуста</p>
     </div>
 }
 else
 {
-    <!-- Контейнер корзины с фоном -->
     <div class="cart-container" style="padding: 20px; border-radius: 10px;">
         <table class="table table-bordered table-striped table-hover">
             <thead>
                 <tr class="table">
-                    <th style="color: black;">Товар</th> 
-                    <th style="color: black;">Количество</th> 
-                    <th style="color: black;">Цена</th> 
-                    <th style="color: black;">Итоговая цена</th> 
-                    <th style="color: black;">Действие</th> 
+                    <th style="color: black;">Товар</th>
+                    <th style="color: black;">Количество</th>
+                    <th style="color: black;">Цена</th>
+                    <th style="color: black;">Итоговая цена</th>
+                    <th style="color: black;">Действие</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
-                    var pricePerFlower = (item.Product?.price ?? 0) / (item.quantity_flowers > 0 ? item.quantity_flowers : 1); // Цена за цветок
-                    var additionalFlowersCost = (item.quantity_flowers - 3 > 0 ? (item.quantity_flowers - 3) * pricePerFlower : 0); // Стоимость дополнительных цветов
+                    var pricePerFlower = (item.Product?.price ?? 0) / (item.quantity_flowers > 0 ? item.quantity_flowers : 1);
+                    var additionalFlowersCost = (item.quantity_flowers - 3 > 0 ? (item.quantity_flowers - 3) * pricePerFlower : 0);
                     var bouquetBasePrice = item.Product?.price ?? 0;
-                    var totalPrice = ((bouquetBasePrice + additionalFlowersCost) * item.quantity); // Итоговая цена с учетом доп. цветов, работы и количества букетов
+                    var totalPrice = ((bouquetBasePrice + additionalFlowersCost) * item.quantity);
 
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
-                                <img src="@item.Product?.imageurl" alt="Image" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;" />
+                                <a href="@Url.Action("item", "catalog", new { id = item.Product?.id })">
+                                    <img src="@item.Product?.imageurl" alt="Image" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;" />
+                                </a>
                                 <div class="ms-3">
-                                    <p class="fw-bold" style="color: black;">@item.Product?.name</p> 
-                                    <small style="color: black;">Кол-во: @item.quantity_flowers</small> 
+                                    <a href="@Url.Action("item", "catalog", new { id = item.Product?.id })" style="text-decoration: none; color: black;">
+                                        <p class="fw-bold">@item.Product?.name</p>
+                                    </a>
+                                    <small style="color: black;">Кол-во цветов: @item.quantity_flowers</small>
                                 </div>
                             </div>
                         </td>
-                        <td style="color: black;">@item.quantity</td>
-                        <td style="color: black;">@(bouquetBasePrice.ToString("F0")) руб.</td> 
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <!-- Кнопка уменьшения количества -->
+                                <form asp-controller="Account" asp-action="RemoveOneFromCart" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@item.id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" @(item.quantity <= 1 ? "disabled" : "")>-</button>
+                                </form>
+
+                                <span class="mx-2" style="color: black; font-weight: bold;">@item.quantity</span>
+
+                                <!-- Кнопка увеличения количества -->
+                                <form asp-controller="Account" asp-action="AddToCart" method="post" class="d-inline">
+                                    <input type="hidden" name="productId" value="@item.product_id" />
+                                    <input type="hidden" name="quantity" value="1" />
+                                    <input type="hidden" name="quantityFlowers" value="@item.quantity_flowers" />
+                                    <button type="submit" class="btn btn-sm btn-outline-success">+</button>
+                                </form>
+                            </div>
+                        </td>
+                        <td style="color: black;">@(bouquetBasePrice.ToString("F0")) руб.</td>
                         <td style="color: black;">@(totalPrice.ToString("F0")) руб.</td>
                         <td>
                             <form asp-controller="Account" asp-action="RemoveFromCart" method="post" class="d-inline">
@@ -68,7 +87,6 @@ else
             </tbody>
         </table>
 
-        <!-- Итоговая цена корзины с кнопкой -->
         <div class="d-flex justify-content-between align-items-center mt-4">
             <h4 class="fw-bold" style="font-family: 'Arial', sans-serif; color: black;">
                 В корзине: <span class="text-primary">@roundedTotalSum</span> руб.

@@ -1,7 +1,132 @@
-﻿
+﻿@model User
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = "Настройки профиля";
+    ViewData["HideSidebar"] = true;
 }
 
-<h1>В разработке</h1>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
+<style>
+        .list-group {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .list-group-item {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border: 1px solid #ddd; /* Светлая граница */
+            border-radius: 6px; /* Скругленные углы */
+            background-color: #fff;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+            .list-group-item a {
+                color: #ff416c; /* Цвет ссылок в оттенках розового */
+                text-decoration: none;
+                font-weight: 500;
+            }
+
+            .list-group-item:hover {
+                background-color: #f1f1f1; /* Цвет при наведении */
+            }
+
+            .list-group-item.active {
+                background-color: #ff416c; /* Активный элемент с фоном цвета градиента */
+                color: white;
+            }
+
+                .list-group-item.active a {
+                    color: white; /* Цвет активной ссылки */
+                }
+</style>
+
+<div class="container py-4">
+    <div class="row">
+        <!-- Левая боковая панель -->
+        <div class="col-md-3">
+            <div class="list-group shadow-sm rounded-3">
+                <a href="#profile-settings" class="list-group-item list-group-item-action active" id="profile-tab" data-bs-toggle="tab" role="tab">
+                    <i class="bi bi-person-circle me-2"></i> Личные данные
+                </a>
+                <a href="#city-settings" class="list-group-item list-group-item-action" id="city-tab" data-bs-toggle="tab" role="tab">
+                    <i class="bi bi-geo-alt me-2"></i> Адрес доставки
+                </a>
+                <a href="#security-settings" class="list-group-item list-group-item-action" id="security-tab" data-bs-toggle="tab" role="tab">
+                    <i class="bi bi-shield-lock me-2"></i> Безопасность и вход
+                </a>
+            </div>
+        </div>
+        <!-- Основной контент -->
+        <div class="col-md-9">
+            <div class="card shadow-lg p-4 border-0 rounded-4">
+                <div class="tab-content mt-3">
+                    <!-- Профиль -->
+                    <div class="tab-pane fade show active" id="profile-settings" role="tabpanel" aria-labelledby="profile-tab">
+                        <h3 class="mb-3"><i class="bi bi-person-lines-fill me-2"></i>Ваши данные</h3>
+                        <form asp-action="UpdateProfile" asp-controller="Profile" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="nickname" class="form-label">Ваше имя *</label>
+                                <input class="form-control rounded-3" type="text" name="username" id="nickname" required value="@HttpContextAccessor.HttpContext.Session.GetString("YourName")">
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Телефон для связи *</label>
+                                <input class="form-control rounded-3" type="text" name="phone" id="phone" required value="@HttpContextAccessor.HttpContext.Session.GetString("Telephone")">
+                            </div>
+                            <button type="submit" class="btn btn-primary rounded-3 px-4">Сохранить изменения</button>
+                        </form>
+                    </div>
+                    <!-- Выбор адреса -->
+                    <div class="tab-pane fade" id="city-settings" role="tabpanel" aria-labelledby="city-tab">
+                        <h3 class="mb-3"><i class="bi bi-geo-alt-fill me-2"></i>Выбор адреса</h3>
+                        <form asp-action="UpdateCity" asp-controller="Profile" method="post">
+                            <div class="mb-3">
+                                <label for="city" class="form-label">Введите адрес</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">Саратовская область, город Энгельс,</span>
+                                    <input class="form-control rounded-3" type="text" id="address" name="address" required placeholder="Введите улицу, дом/квартиру">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <span class="input-group-text">Сохраненный адрес: @HttpContextAccessor.HttpContext.Session.GetString("Adress")</span>
+                            </div>
+                            <button type="submit" class="btn btn-primary rounded-3 px-4 mt-3">Сохранить город</button>
+                        </form>
+                    </div>
+                    <!-- Безопасность и вход -->
+                    <div class="tab-pane fade" id="security-settings" role="tabpanel" aria-labelledby="security-tab">
+                        <h3 class="mb-3"><i class="bi bi-lock-fill me-2"></i>Смена пароля</h3>
+                        <form asp-action="ChangePassword" asp-controller="Profile" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="current-password" class="form-label">Текущий пароль</label>
+                                <input class="form-control rounded-3" type="password" name="currentPassword" id="currentPassword" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="new-password" class="form-label">Новый пароль</label>
+                                <input class="form-control rounded-3" type="password" name="newPassword" id="newPassword" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary rounded-3 px-4">Сменить пароль</button>
+                        </form>
+                        <hr class="my-4">
+                        <h3 class="mb-3"><i class="bi bi-envelope-fill me-2"></i>Смена почты</h3>
+                        <form asp-action="ChangeEmail" asp-controller="Profile" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Текущая почта: @HttpContextAccessor.HttpContext.Session.GetString("Email")</label>
+                            </div>
+                            <div class="mb-3">
+                                <label for="new-email" class="form-label">Новая почта</label>
+                                <input class="form-control rounded-3" type="email" name="newEmail" id="newEmail" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email-password" class="form-label">Текущий пароль</label>
+                                <input class="form-control rounded-3" type="password" name="password" id="password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary rounded-3 px-4">Сменить почту</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

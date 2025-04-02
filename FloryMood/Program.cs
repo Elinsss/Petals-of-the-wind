@@ -20,7 +20,7 @@ internal class Program
         // Регистрация пользовательских сервисов
         builder.Services.AddScoped<ProductService>();
         builder.Services.AddScoped<AccountService>();
-
+        builder.Services.AddScoped<WishlistService>();
 
 
 

@@ -7,6 +7,7 @@ namespace Лепестки_ветра.Service
     {
         private readonly Supabase.Client _client;
 
+
         public AccountService(SupabaseClientService clientService)
         {
             _client = clientService.Client;
@@ -147,8 +148,44 @@ namespace Лепестки_ветра.Service
         }
 
 
+        public async Task<Product?> GetProductByIdAsync(int productId)
+        {
+            var product = await _client.From<Product>()
+                .Filter("id", Supabase.Postgrest.Constants.Operator.Equals, productId)
+                .Single();
+
+            return product;
+        }
 
 
+        public async Task DecreaseCartItemQuantityAsync(int userId, int cartItemId)
+        {
+            var cartItems = await _client.From<cart>()
+                .Filter("id", Supabase.Postgrest.Constants.Operator.Equals, cartItemId)
+                .Filter("user_id", Supabase.Postgrest.Constants.Operator.Equals, userId)
+                .Single();
+
+            if (cartItems != null)
+            {
+                if (cartItems.quantity > 1)
+                {
+                    cartItems.quantity--;
+
+                    // Обновляем количество товара в БД
+                    await _client.From<cart>()
+                        .Where(c => c.id == cartItemId)
+                        .Set(c => c.quantity, cartItems.quantity)
+                        .Update();
+                }
+                else
+                {
+                    // Удаляем товар из корзины, если он последний
+                    await _client.From<cart>()
+                        .Where(c => c.id == cartItemId)
+                        .Delete();
+                }
+            }
+        }
 
     }
 }

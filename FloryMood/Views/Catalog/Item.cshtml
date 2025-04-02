@@ -408,9 +408,12 @@
                             <span>🛒</span> Добавить в корзину
                         </button>
                     </form>
-                    <a asp-controller="Wishlist" asp-action="AddToWishlist" asp-route-id="@Model.id" class="btn btn-outline-danger flex-grow-1 shadow-sm d-flex align-items-center justify-content-center gap-2">
-                        <span>❤️</span> В избранное
-                    </a>
+                    <form asp-controller="Account" asp-action="AddToWishlist" method="post">
+                        <input type="hidden" name="productId" value="@Model.id" />
+                        <button type="submit" class="btn btn-outline-danger flex-grow-1 shadow-sm d-flex align-items-center justify-content-center gap-2">
+                            <span>❤️</span> В избранное
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -570,9 +573,12 @@ else
                             <span>🛒</span> Добавить в корзину
                         </button>
                     </form>
-                    <a asp-controller="Wishlist" asp-action="AddToWishlist" asp-route-id="@Model.id" class="btn btn-outline-danger flex-grow-1 shadow-sm d-flex align-items-center justify-content-center gap-2">
-                        <span>❤️</span> В избранное
-                    </a>
+                    <form asp-controller="account" asp-action="AddToWishlist" method="post">
+                        <input type="hidden" name="productId" value="@Model.id" />
+                        <button type="submit" class="btn btn-outline-danger flex-grow-1 shadow-sm d-flex align-items-center justify-content-center gap-2">
+                            <span>❤️</span> В избранное
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

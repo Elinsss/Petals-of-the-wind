@@ -10,6 +10,5 @@ public class User : BaseModel
     public string password { get; set; }
     public string your_name { get; set; }
     public string telephone { get; set; }
-
-
+    public string delivery_address { get; set; }
 }
